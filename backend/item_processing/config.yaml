@@ -1,0 +1,12 @@
+path: /home/alexm/PycharmProjects/sales_bot/item_processing/data
+train: train
+val: val
+
+names:
+  0: item_name
+  1: item_volume
+  2: item_price
+  3: item_sale_prcnt
+  4: sale_type
+  5: item_member_price
+  6: item_price_per_unit
