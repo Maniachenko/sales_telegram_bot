@@ -3,6 +3,7 @@ import os
 from flask import Flask, request, jsonify
 import cv2
 import logging
+
 import base64
 import tempfile
 from ultralytics import YOLO
@@ -21,188 +22,192 @@ got_model = AutoModel.from_pretrained('stepfun-ai/GOT-OCR2_0',
                                       use_safetensors=True,
                                       pad_token_id=tokenizer.eos_token_id).eval().cuda()
 
-# Initialize Flask app
 app = Flask(__name__)
+# Configure the logger
+logging.basicConfig(
+    level=logging.INFO,  # Set the logging level (e.g., DEBUG, INFO, WARNING, ERROR)
+    format='%(asctime)s - %(levelname)s - %(message)s',  # Log message format
+    handlers=[logging.StreamHandler()]  # Log to console (can add file handler here too)
+)
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[logging.StreamHandler()])
+# Get a logger instance
 logger = logging.getLogger(__name__)
 
 
-def predict(model, img, classes=[], conf=0.5):
-    """
-    Predict objects in the image using a specified YOLO model.
-
-    :param model: The YOLO model to use for prediction.
-    :param img: The image to run predictions on.
-    :param classes: Optional; List of class indices to filter the predictions by.
-    :param conf: Optional; Confidence threshold for predictions. Default is 0.5.
-
-    :return: YOLO model prediction results.
-    """
-    return model.predict(img, classes=classes, conf=conf, device='cpu')
+# Helper function to predict using YOLO model
+def predict(chosen_model, img, classes=[], conf=0.5):
+    """Predict using YOLO model."""
+    if classes:
+        results = chosen_model.predict(img, classes=classes, conf=conf, device='cpu')  # Use CPU
+    else:
+        results = chosen_model.predict(img, conf=conf, device='cpu')  # Use CPU
+    return results
 
 
-def predict_and_detect(model, img, classes=[], conf=0.5):
-    """
-    Detect objects and draw bounding boxes on the image with class labels.
-
-    :param model: The YOLO model to use for detection.
-    :param img: The image to detect objects on.
-    :param classes: Optional; List of class indices to filter the detection by.
-    :param conf: Optional; Confidence threshold for detection. Default is 0.5.
-
-    :return: Tuple of the modified image with bounding boxes and the YOLO model prediction results.
-    """
-    results = predict(model, img, classes, conf)
+# Helper function to detect and draw bounding boxes
+def predict_and_detect(chosen_model, img, classes=[], conf=0.5):
+    """Detect and draw bounding boxes with class names."""
+    results = predict(chosen_model, img, classes, conf)
     for result in results:
         for box in result.boxes:
-            cv2.rectangle(img, (int(box.xyxy[0][0]), int(box.xyxy[0][1])),
-                          (int(box.xyxy[0][2]), int(box.xyxy[0][3])), (255, 0, 0), 2)
+            # Draw bounding boxes
+            cv2.rectangle(img,
+                          (int(box.xyxy[0][0]), int(box.xyxy[0][1])),
+                          (int(box.xyxy[0][2]), int(box.xyxy[0][3])),
+                          (255, 0, 0), 2)
+            # Add class names
             cv2.putText(img, f"{result.names[int(box.cls[0])]}",
                         (int(box.xyxy[0][0]), int(box.xyxy[0][1]) - 10),
                         cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 1)
     return img, results
 
 
+# Helper function to encode image as base64 string
 def image_to_base64(img):
-    """
-    Encode the image as a base64 string.
-
-    :param img: The image to encode.
-
-    :return: Base64 encoded string of the image.
-    """
-    _, buffer = cv2.imencode('.png', img)
-    return base64.b64encode(buffer).decode('utf-8')
+    _, buffer = cv2.imencode('.png', img)  # Encode the image as PNG
+    return base64.b64encode(buffer).decode('utf-8')  # Return base64 encoded string
 
 
+# OCR function using GOT-OCR2_0 model and chat interface
 def extract_text_from_image(image_path):
     """
-    Extract text from an image using the GOT-OCR2_0 model.
-
-    :param image_path: The file path to the image for OCR.
-
-    :return: Extracted text from the image.
-    :raises Exception: If an error occurs during the OCR process.
+    Extract text from an image using the GOT-OCR2_0 model's chat interface.
     """
     try:
-        return got_model.chat(tokenizer, image_path, ocr_type='ocr')
+        # Run the OCR chat model on the image path (use tokenizer and model as before)
+        extracted_text = got_model.chat(tokenizer, image_path, ocr_type='ocr')
+        return extracted_text
     except Exception as e:
-        raise Exception(f"Error in extract_text_from_image: {e}")
+        raise Exception(f"Exception in extract_text_from_image: {e}")
 
 
+# OCR function using GOT-OCR2_0 model and bounding boxes
 def extract_text_from_image_with_box(image_path, box):
     """
-    Extract text from an image within a specific bounding box using the GOT-OCR2_0 model.
-
-    :param image_path: The file path to the image for OCR.
-    :param box: List of coordinates defining the bounding box [x_min, y_min, x_max, y_max].
-
-    :return: Extracted text from the bounding box in the image.
-    :raises Exception: If an error occurs during the OCR process.
+    Extract text from an image using the GOT-OCR2_0 model's chat interface with a bounding box.
     """
     try:
+        # Convert the box (list of integers) to a string format expected by the model
         ocr_box_str = '[' + ','.join(map(str, box)) + ']'
-        return got_model.chat(tokenizer, image_path, ocr_type='ocr', ocr_box=ocr_box_str)
+
+        # Fine-grained OCR using bounding box
+        extracted_text = got_model.chat(tokenizer, image_path, ocr_type='ocr', ocr_box=ocr_box_str)
+        return extracted_text
     except Exception as e:
-        raise Exception(f"Error in extract_text_from_image_with_box: {e}")
+        raise Exception(f"Exception in extract_text_from_image_with_box: {e}")
 
 
+# API route to run YOLO on an uploaded image
 @app.route('/predict', methods=['POST'])
 def run_yolo():
-    """
-    API endpoint to run YOLO detection on an uploaded image.
-
-    :return: JSON response containing the detection results and base64-encoded image.
-    :raises ValueError: If no image is uploaded or an error occurs during processing.
-    """
     if 'image' not in request.files:
         return jsonify({'error': 'No image uploaded'}), 400
 
+    # Use a temporary file to store the image
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temp_img_file:
-        request.files['image'].save(temp_img_file.name)
+        # Load the image file from the request
+        image_file = request.files['image']
+        image_file.save(temp_img_file.name)
         temp_img_path = temp_img_file.name
 
     try:
+        # Read the image using OpenCV
         img = cv2.imread(temp_img_path)
-        chosen_model = model1 if request.args.get('model', 'model1') == 'model1' else model2
-        detected_img, results = predict_and_detect(chosen_model, img, conf=0.5)
 
-        result_data = [{'class': result.names[int(box.cls[0])],
-                        'confidence': box.conf[0].item(),
-                        'box': [int(box.xyxy[0][0]), int(box.xyxy[0][1]), int(box.xyxy[0][2]), int(box.xyxy[0][3])]}
-                       for result in results for box in result.boxes]
+        # Select model based on query param, default to model1
+        chosen_model = request.args.get('model', 'model1')
+        if chosen_model == 'model1':
+            model = model1
+        else:
+            model = model2
 
-        return jsonify({'detections': result_data, 'image': image_to_base64(detected_img)}), 200
+        # Run YOLO detection on the image
+        detected_img, results = predict_and_detect(model, img, conf=0.5)
+
+        # Convert image to base64
+        base64_image = image_to_base64(detected_img)
+
+        # Convert results into JSON format
+        result_data = []
+        for result in results:
+            for box in result.boxes:
+                result_data.append({
+                    'class': result.names[int(box.cls[0])],
+                    'confidence': box.conf[0].item(),
+                    'box': [int(box.xyxy[0][0]), int(box.xyxy[0][1]), int(box.xyxy[0][2]), int(box.xyxy[0][3])]
+                })
+
+        return jsonify({'detections': result_data, 'image': base64_image}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
     finally:
+        # Clean up: Delete the temporary image file
         os.remove(temp_img_path)
 
 
+# API route for text extraction using GOT-OCR2_0
 @app.route('/extract_text', methods=['POST'])
 def extract_text():
-    """
-    API endpoint to extract text from an uploaded image using the GOT-OCR2_0 model.
-
-    :return: JSON response containing the extracted text.
-    :raises ValueError: If no image is uploaded or an error occurs during the OCR process.
-    """
     if 'image' not in request.files:
         return jsonify({'error': 'No image uploaded'}), 400
 
+    # Use a temporary file to store the image
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temp_img_file:
-        request.files['image'].save(temp_img_file.name)
+        image_file = request.files['image']
+        image_file.save(temp_img_file.name)
         temp_img_path = temp_img_file.name
 
     try:
+        # Extract text using GOT-OCR2_0 model's chat interface
         extracted_text = extract_text_from_image(temp_img_path)
+
         return jsonify({'extracted_text': extracted_text}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
     finally:
+        # Clean up: Delete the temporary image file
         os.remove(temp_img_path)
 
 
 @app.route('/extract_text_with_box', methods=['POST'])
 def extract_text_with_box():
-    """
-    API endpoint to extract text from a specific bounding box in an uploaded image using the GOT-OCR2_0 model.
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image uploaded'}), 400
 
-    :return: JSON response containing the extracted text from the bounding box.
-    :raises ValueError: If no image or bounding box is uploaded or an error occurs during the OCR process.
-    """
-    if 'image' not in request.files or not request.form.get('json'):
-        return jsonify({'error': 'No image or JSON uploaded'}), 400
-
+    # Parse the JSON payload correctly
     try:
         json_data = json.loads(request.form.get('json'))
         box = json_data.get('box')
         if not box:
             logger.error("No bounding box provided")
             return jsonify({'error': 'No bounding box provided'}), 400
-
-        logger.info(f"Received bounding box: {box}")
     except Exception as e:
         logger.error(f"Failed to parse JSON data: {e}")
-        return jsonify({'error': 'Invalid JSON data'}), 400
+        return jsonify({'error': 'Invalid or missing JSON data'}), 400
 
+    logger.info(f"Received bounding box: {box}")
+
+    # Proceed with processing the image and the bounding box...
+
+    # Process the image and bounding box
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temp_img_file:
-        request.files['image'].save(temp_img_file.name)
+        image_file = request.files['image']
+        image_file.save(temp_img_file.name)
         temp_img_path = temp_img_file.name
 
     try:
+        # Extract text using GOT-OCR2_0 model's chat interface
         extracted_text = extract_text_from_image_with_box(temp_img_path, box)
+        logger.info(f"Extracted text: {extracted_text}")
+
         return jsonify({'extracted_text': extracted_text}), 200
 
     except Exception as e:
-        logger.error(f"Error in extract_text_with_box: {e}")
+        logger.error(f"Exception in extract_text_with_box: {e}")
         return jsonify({'error': str(e)}), 500
 
     finally:
