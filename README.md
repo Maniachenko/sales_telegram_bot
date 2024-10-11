@@ -96,6 +96,10 @@ The bot interacts with users in Telegram Messenger, helping them track prices, m
 
 1. **User Interaction Flow**
     - **Start Command (`/start`)**: The bot welcomes new users, guiding them through language selection and shop tracking setup. Returning users are taken directly to the main menu.
+![Telegram Bot Screenshot 1](https://drive.google.com/uc?export=view&id=1551NCdRtcIxJS0j4S2KeqycOVBndQZb-)
+    ![Telegram Bot Screenshot 2](https://drive.google.com/uc?export=view&id=1-8KtDn0ak2OPikvU-npX9ShUkVgxFMCD)
+    ![Telegram Bot Screenshot 3](https://drive.google.com/uc?export=view&id=1OstEV8fvUoA4sQS50d6QUGv8En1yrGqK)
+
 
 2. **Main Menu Options**
     - **🔍 Search for Item**: Users can search for specific items across shops, receiving item details including prices and images (if enabled).
