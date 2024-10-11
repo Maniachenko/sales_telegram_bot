@@ -23,7 +23,9 @@ const HomePage = () => {
   return (
     <div>
       <h1>Uploaded PDFs</h1>
-      <Link to="/upload">Upload New PDF</Link>
+      <div>
+        <Link to="/upload" style={{ display: 'block', marginBottom: '10px' }}>Upload New PDF</Link>
+      </div>
       <PdfTable pdfs={pdfs} refreshPdfs={fetchPdfs} />
     </div>
   );

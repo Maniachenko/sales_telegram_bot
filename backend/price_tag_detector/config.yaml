@@ -1,7 +1,0 @@
-path: /home/alexm/PycharmProjects/sales_bot/price_tag_detector/data
-train: train
-val: val
-test: test
-
-names:
-  0: price_tag

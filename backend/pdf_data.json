@@ -4,328 +4,375 @@
         "filename": "Albert - 28SM_akcni_letak2.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-15 18:08:16"
+        "upload_date": "2024-07-15 18:08:16",
+        "used": false
     },
     {
         "shop_name": "Albert Supermarket",
         "filename": "252027SM_katalog_leto.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-15 18:52:20"
+        "upload_date": "2024-07-15 18:52:20",
+        "used": false
     },
     {
         "shop_name": "Albert Hypermarket",
         "filename": "252028HM_akcni_letak2.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-15 19:00:35"
+        "upload_date": "2024-07-15 19:00:35",
+        "used": false
     },
     {
         "shop_name": "Albert Hypermarket",
         "filename": "252027HM_katalog_brand.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-15 19:01:44"
+        "upload_date": "2024-07-15 19:01:44",
+        "used": false
     },
     {
         "shop_name": "CBA Premium",
         "filename": "CBA-letak-tydenni_PREMIUM_28A-1.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 00:44:20"
+        "upload_date": "2024-07-16 00:44:20",
+        "used": false
     },
     {
         "shop_name": "CBA Potraviny",
         "filename": "CBA-letak-POTRAVINY-14.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-14",
-        "upload_date": "2024-07-16 00:45:01"
+        "upload_date": "2024-07-16 00:45:01",
+        "used": false
     },
     {
         "shop_name": "CBA Market",
         "filename": "Market_14_nahled.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-14",
-        "upload_date": "2024-07-16 00:45:39"
+        "upload_date": "2024-07-16 00:45:39",
+        "used": false
     },
     {
         "shop_name": "Flop Top",
         "filename": "floptop28.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 00:51:50"
+        "upload_date": "2024-07-16 00:51:50",
+        "used": false
     },
     {
         "shop_name": "Flop",
         "filename": "flop28.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 00:54:55"
+        "upload_date": "2024-07-16 00:54:55",
+        "used": false
     },
     {
         "shop_name": "Kaufland",
         "filename": "Kaufland-17-07-2024-23-07-2024-01.pdf",
         "valid_from": "2024-07-17",
         "valid_to": "2024-07-23",
-        "upload_date": "2024-07-16 00:56:19"
+        "upload_date": "2024-07-16 00:56:19",
+        "used": false
     },
     {
         "shop_name": "Kaufland",
         "filename": "Kaufland-10-07-2024-16-07-2024-01.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 00:56:53"
+        "upload_date": "2024-07-16 00:56:53",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "2520Gastronomie.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 00:58:47"
+        "upload_date": "2024-07-16 00:58:47",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "2520Maloobchod.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 00:59:43"
+        "upload_date": "2024-07-16 00:59:43",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "25ADdla.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 01:02:05"
+        "upload_date": "2024-07-16 01:02:05",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "2520Kosmetika.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-30",
-        "upload_date": "2024-07-16 01:03:02"
+        "upload_date": "2024-07-16 01:03:02",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "2520food.pdf",
         "valid_from": "2024-06-19",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 01:03:53"
+        "upload_date": "2024-07-16 01:03:53",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "2520Zmrzliny.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-30",
-        "upload_date": "2024-07-16 01:04:35"
+        "upload_date": "2024-07-16 01:04:35",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "25AD.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 01:11:36"
+        "upload_date": "2024-07-16 01:11:36",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "2520gastronomie.pdf",
         "valid_from": "2024-05-22",
         "valid_to": "2024-07-30",
-        "upload_date": "2024-07-16 01:12:18"
+        "upload_date": "2024-07-16 01:12:18",
+        "used": false
     },
     {
         "shop_name": "Makro",
         "filename": "2520maloobchod.pdf",
         "valid_from": "2024-05-22",
         "valid_to": "2024-07-30",
-        "upload_date": "2024-07-16 01:12:56"
+        "upload_date": "2024-07-16 01:12:56",
+        "used": false
     },
     {
         "shop_name": "Ratio",
         "filename": "7_cervenec_letak_web.pdf",
         "valid_from": "2024-07-01",
         "valid_to": "2024-07-31",
-        "upload_date": "2024-07-16 01:14:48"
+        "upload_date": "2024-07-16 01:14:48",
+        "used": false
     },
     {
         "shop_name": "Tesco Hypermarket",
         "filename": "hypermarkety_2024-07-10.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 01:18:38"
+        "upload_date": "2024-07-16 01:18:38",
+        "used": false
     },
     {
         "shop_name": "Tesco Supermarket",
         "filename": "1k_2024-07-10.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 01:19:31"
+        "upload_date": "2024-07-16 01:19:31",
+        "used": false
     },
     {
         "shop_name": "Tesco Hypermarket",
         "filename": "hypermarkety_2024-07-17.pdf",
         "valid_from": "2024-07-17",
         "valid_to": "2024-07-23",
-        "upload_date": "2024-07-16 01:20:13"
+        "upload_date": "2024-07-16 01:20:13",
+        "used": false
     },
     {
         "shop_name": "Tesco Supermarket",
         "filename": "1k_2024-07-17.pdf",
         "valid_from": "2024-07-17",
         "valid_to": "2024-07-23",
-        "upload_date": "2024-07-16 01:20:42"
+        "upload_date": "2024-07-16 01:20:42",
+        "used": false
     },
     {
         "shop_name": "Bene",
         "filename": "bene_napoje_cervenec.pdf",
         "valid_from": "2024-07-01",
         "valid_to": "2024-07-31",
-        "upload_date": "2024-07-16 01:23:12"
+        "upload_date": "2024-07-16 01:23:12",
+        "used": false
     },
     {
         "shop_name": "EsoMarket",
         "filename": "ESO_2024-15_nahled_Pavel.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-21",
-        "upload_date": "2024-07-16 01:24:10"
+        "upload_date": "2024-07-16 01:24:10",
+        "used": false
     },
     {
         "shop_name": "Globus",
         "filename": "globus42260.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 01:28:20"
+        "upload_date": "2024-07-16 01:28:20",
+        "used": false
     },
     {
         "shop_name": "Tamda Foods",
         "filename": "Letak_PDF_deb7ba881b.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 01:29:24"
+        "upload_date": "2024-07-16 01:29:24",
+        "used": false
     },
     {
         "shop_name": "Tamda Foods",
         "filename": "Letak_PDF_6e3f3f40db.pdf",
         "valid_from": "2024-07-17",
         "valid_to": "2024-07-23",
-        "upload_date": "2024-07-16 01:30:33"
+        "upload_date": "2024-07-16 01:30:33",
+        "used": false
     },
     {
         "shop_name": "Zeman",
         "filename": "2566_full.jpg",
         "valid_from": "2024-07-15",
         "valid_to": "2024-07-20",
-        "upload_date": "2024-07-16 01:34:00"
+        "upload_date": "2024-07-16 01:34:00",
+        "used": false
     },
     {
         "shop_name": "Zeman",
         "filename": "2558_full.jpg",
         "valid_from": "2024-07-15",
         "valid_to": "2024-07-20",
-        "upload_date": "2024-07-16 01:34:20"
+        "upload_date": "2024-07-16 01:34:20",
+        "used": false
     },
     {
         "shop_name": "Billa",
         "filename": "25202024.pdf",
         "valid_from": "2024-07-17",
         "valid_to": "2024-07-23",
-        "upload_date": "2024-07-16 18:24:14"
+        "upload_date": "2024-07-16 18:24:14",
+        "used": false
     },
     {
         "shop_name": "Billa",
         "filename": "25202024_1.pdf",
         "valid_from": "2024-07-10",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 18:24:47"
+        "upload_date": "2024-07-16 18:24:47",
+        "used": false
     },
     {
         "shop_name": "Billa",
         "filename": "BILLA.cz - BILLA klub - 3.7. - 16.7.2024.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-16",
-        "upload_date": "2024-07-16 18:25:47"
+        "upload_date": "2024-07-16 18:25:47",
+        "used": false
     },
     {
         "shop_name": "Billa",
         "filename": "2520Pivo.pdf",
         "valid_from": "2024-07-17",
         "valid_to": "2024-08-13",
-        "upload_date": "2024-07-16 18:26:14"
+        "upload_date": "2024-07-16 18:26:14",
+        "used": false
     },
     {
         "shop_name": "Billa",
         "filename": "259Br.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-30",
-        "upload_date": "2024-07-16 18:26:41"
+        "upload_date": "2024-07-16 18:26:41",
+        "used": false
     },
     {
         "shop_name": "Billa",
         "filename": "2520novinky.pdf",
         "valid_from": "2024-07-03",
         "valid_to": "2024-07-30",
-        "upload_date": "2024-07-16 18:27:01"
+        "upload_date": "2024-07-16 18:27:01",
+        "used": false
     },
     {
         "shop_name": "Billa",
         "filename": "2520Clever.pdf",
         "valid_from": "2024-06-26",
         "valid_to": "2024-07-23",
-        "upload_date": "2024-07-16 18:27:40"
+        "upload_date": "2024-07-16 18:27:40",
+        "used": false
     },
     {
         "shop_name": "Lidl",
         "filename": "Akcni-letak-OD-PONDELI-15-7-21-7-2024-02.pdf",
         "valid_from": "2024-07-15",
         "valid_to": "2024-07-21",
-        "upload_date": "2024-07-16 18:34:23"
+        "upload_date": "2024-07-16 18:34:23",
+        "used": false
     },
     {
         "shop_name": "Lidl",
         "filename": "Akcni-letak-OD-CTVRTKA-18-7-21-7-2024-02.pdf",
         "valid_from": "2024-07-18",
         "valid_to": "2024-07-21",
-        "upload_date": "2024-07-16 18:34:57"
+        "upload_date": "2024-07-16 18:34:57",
+        "used": false
     },
     {
         "shop_name": "Lidl",
         "filename": "Spotrebni-zbozi-15-7-21-7-2024-01.pdf",
         "valid_from": "2024-07-15",
         "valid_to": "2024-07-21",
-        "upload_date": "2024-07-16 18:35:29"
+        "upload_date": "2024-07-16 18:35:29",
+        "used": false
     },
     {
         "shop_name": "Lidl Shop",
         "filename": "Hity-tydne-se-slevou-az-52-15-7-21-7-2024-01.pdf",
         "valid_from": "2024-07-15",
         "valid_to": "2024-07-21",
-        "upload_date": "2024-07-16 18:43:39"
+        "upload_date": "2024-07-16 18:43:39",
+        "used": false
     },
     {
         "shop_name": "Lidl Shop",
         "filename": "lidl-shop-cz-magazin-cervenec-8-7-21-7-2024-05.pdf",
         "valid_from": "2024-07-08",
         "valid_to": "2024-07-21",
-        "upload_date": "2024-07-16 18:44:12"
+        "upload_date": "2024-07-16 18:44:12",
+        "used": false
     },
     {
         "shop_name": "Penny",
         "filename": "11_07.pdf",
         "valid_from": "2024-07-11",
         "valid_to": "2024-07-17",
-        "upload_date": "2024-07-16 18:47:47"
+        "upload_date": "2024-07-16 18:47:47",
+        "used": false
     },
     {
         "shop_name": "Penny",
         "filename": "18_07.pdf",
         "valid_from": "2024-07-18",
         "valid_to": "2024-07-24",
-        "upload_date": "2024-07-16 18:48:26"
+        "upload_date": "2024-07-16 18:48:26",
+        "used": false
     },
     {
         "shop_name": "Travel Free",
         "filename": "17206972581742-special-offer-2024-07-12-2024-07-25.pdf",
         "valid_from": "2024-07-12",
         "valid_to": "2024-07-25",
-        "upload_date": "2024-07-16 18:49:21"
+        "upload_date": "2024-07-16 18:49:21",
+        "used": false
     }
 ]

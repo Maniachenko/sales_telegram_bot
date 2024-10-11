@@ -1,6 +1,7 @@
-path: /home/alexm/PycharmProjects/sales_bot/item_processing/data
-train: train
-val: val
+train: /home/alexm/PycharmProjects/sales_telegram_bot/backend/item_processing/item_names/train/images
+val: /home/alexm/PycharmProjects/sales_telegram_bot/backend/item_processing/item_names/val/images
+test: /home/alexm/PycharmProjects/sales_telegram_bot/backend/item_processing/item_names/test/images
+
 
 names:
   0: item_name
@@ -10,3 +11,4 @@ names:
   4: sale_type
   5: item_member_price
   6: item_price_per_unit
+  7: item_initial_price

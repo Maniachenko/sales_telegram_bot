@@ -1,7 +1,6 @@
-path: /home/alexm/PycharmProjects/sales_bot/data
-train: train
-val: val
-test: test
+train: /home/alexm/PycharmProjects/sales_telegram_bot/backend/item_detector/item_names/train/images
+val: /home/alexm/PycharmProjects/sales_telegram_bot/backend/item_detector/item_names/val/images
+test: /home/alexm/PycharmProjects/sales_telegram_bot/backend/item_detector/item_names/test/images
 
 names:
-  0: price_tag
+  0: shop_item

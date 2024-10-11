@@ -67,18 +67,6 @@ const UploadPage = () => {
       });
   };
 
-  const handleImportItemDetection = () => {
-    axios.post('http://127.0.0.1:5000/import_item_detection')
-      .then(response => {
-        console.log(response.data);
-        alert(response.data.message);
-      })
-      .catch(error => {
-        console.error('Error importing item detection:', error);
-        setError('Error importing item detection');
-      });
-  };
-
   return (
     <div>
       <h1>Upload Shop PDF</h1>
@@ -97,7 +85,6 @@ const UploadPage = () => {
         />
         <button type="submit" style={{ display: 'block', marginBottom: '10px' }}>Upload PDF</button>
       </form>
-      <button onClick={handleImportItemDetection} style={{ display: 'block', marginTop: '20px' }}>Import for Item Detection</button>
     </div>
   );
 };

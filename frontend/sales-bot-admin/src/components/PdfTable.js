@@ -45,6 +45,18 @@ const PdfTable = ({ pdfs, refreshPdfs }) => {
       });
   };
 
+  const handleTriggerPipeline = (filename) => {
+  axios.post(`http://127.0.0.1:5000/trigger_pipeline/${filename}`)
+    .then(response => {
+      console.log('Pipeline triggered:', response.data);
+      refreshPdfs();  // Refresh the PDF list after triggering the pipeline
+    })
+    .catch(error => {
+      console.error('Error triggering pipeline:', error);
+    });
+};
+
+
   const sortedPdfs = pdfs.sort((a, b) => new Date(b.valid_to) - new Date(a.valid_to));
 
   const isNearExpiry = (validToDate) => {
@@ -67,6 +79,7 @@ const PdfTable = ({ pdfs, refreshPdfs }) => {
             <th>Upload Date</th>
             <th>Edit</th>
             <th>Delete</th>
+            <th>Split Pages</th>
           </tr>
         </thead>
         <tbody>
@@ -79,10 +92,19 @@ const PdfTable = ({ pdfs, refreshPdfs }) => {
               <td>{pdf.upload_date}</td>
               <td><button onClick={() => handleEdit(pdf)}>Edit</button></td>
               <td><button onClick={() => handleDelete(pdf.filename)}>Delete</button></td>
+              <td>
+                <button
+                    onClick={() => handleTriggerPipeline(pdf.filename)}
+                    disabled={pdf.used}  // Disable button if already processed
+                >
+                    {pdf.used ? 'Already Processed' : 'Trigger Pipeline'}
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
       {editModalOpen && (
         <EditModal
           pdf={selectedPdf}

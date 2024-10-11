@@ -20,8 +20,7 @@ th {
 }
 
 .near-expiry {
-  background-color: red;
-  color: white;
+  background-color: #ffcccc;
 }
 
 .modal {
