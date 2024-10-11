@@ -46,7 +46,7 @@ Currently, the system is running locally. I plan to integrate a system using **A
 
 The next important component is the **data pipeline**. Information and code for this component can be found in a separate repository:
 
-[_Include repository link here..._](https://github.com/Maniachenko/sales_telegram_bot_data_pipeline)
+[_Repository link here..._](https://github.com/Maniachenko/sales_telegram_bot_data_pipeline)
 
 ### Telegram Bot
 
