@@ -90,6 +90,64 @@ The bot interacts with users in Telegram Messenger, helping them track prices, m
 8. **AWS S3 and DynamoDB Integration**
     - The bot downloads files from **S3** and processes item images and sale sheets. **DynamoDB** is used to store and retrieve user preferences, tracked items, shop selection history, and other related data.
 
+#### How the Bot Works
+
+The bot interacts with users in Telegram Messenger, helping them track prices, manage sale sheets, and compare items across different shops. The system leverages AWS services like S3 for file storage, DynamoDB for storing user preferences and tracking data, and Lambda functions for real-time event handling. Below is a breakdown of how the bot operates:
+
+1. **User Interaction Flow**
+    - **Start Command (`/start`)**: The bot welcomes new users, guiding them through language selection and shop tracking setup. Returning users are taken directly to the main menu.
+
+2. **Main Menu Options**
+    - **🔍 Search for Item**: Users can search for specific items across shops, receiving item details including prices and images (if enabled).
+    - **🛒 Add Shop Item to Track Price**: Users can add items to a tracking list. The bot monitors these items and notifies the user when they are on sale.
+    - **🛍 Compare Shopping List Over Shops**: Users can compare prices of items across different shops by selecting shops and entering their shopping list.
+    - **⚙️ Settings**: Allows users to manage preferences like excluding or including shops, toggling sale sheet PDF, enabling/disabling item photo groups, and adjusting language settings.
+    - **ℹ️ About Project**: Provides information about the bot and its purpose.
+
+3. **Settings Menu**
+    - Users can exclude/include shops for tracking, manage their tracked items, toggle options like item photo groups, and change the interface language.
+
+4. **Shop Selection and Item Tracking**
+    - The bot ensures users include at least one shop for tracking. When an item is added to the tracking list, the bot monitors the item’s price and notifies the user when it goes on sale.
+
+5. **Search and N-Gram Matching**
+    - The bot uses n-gram matching to find items by searching for flexible name variations in the **DynamoDB `detected_data_table`**.
+
+6. **Media Handling**
+    - The bot can send item images in media groups (albums) through Telegram, allowing users to view products along with pricing information.
+
+7. **State Management**
+    - The bot saves user preferences and interaction states in **DynamoDB**, ensuring a seamless user experience across sessions.
+        - **State Saving**: The bot saves the user’s current state (e.g., searching, tracking) to resume interaction seamlessly.
+        - **Shop Selection History**: Maintains a history of selected shops, making it easy for users to reselect shops in the future.
+
+8. **AWS S3 and DynamoDB Integration**
+    - The bot downloads files from **S3** and processes item images and sale sheets. **DynamoDB** is used to store and retrieve user preferences, tracked items, shop selection history, and other related data.
+
+### User Preferences Table
+
+The **DynamoDB** table storing user preferences includes various attributes to personalize the shopping experience for each user:
+
+| Attribute               | Type   | Description                                    |
+|-------------------------|--------|------------------------------------------------|
+| **chat_id**              | String | The unique identifier for the user in Telegram |
+| **excluded_shops**       | List   | List of shops excluded from tracking           |
+| **item_list**            | List   | Items the user has added to their shopping list|
+| **language**             | String | User’s preferred language for bot interaction  |
+| **photo_group_enabled**  | Bool   | Whether item photos should be sent as media groups |
+| **selected_shops**       | List   | Shops selected by the user for tracking        |
+| **selected_shops_history** | List | History of selected shops for easy re-selection|
+| **state**                | String | Current state of the user in the bot’s flow    |
+| **text_info_enabled**    | Bool   | Whether text information is enabled for items  |
+| **tracked_items**        | List   | Items the user is currently tracking           |
+
+#### Example Data:
+
+| **chat_id** | **excluded_shops**              | **item_list** | **language** | **photo_group_enabled** | **selected_shops**                         | **selected_shops_history**               | **state** | **text_info_enabled** | **tracked_items** |
+|-------------|---------------------------------|---------------|--------------|-------------------------|--------------------------------------------|------------------------------------------|-----------|-----------------------|------------------|
+| 825063***   | [Albert Hypermarket]            | []            | en           | true                    | [Albert Supermarket, Albert Hypermarket]   | [Albert Supermarket, Albert Hypermarket] | null      | false                 | []               |
+| 437792***   | []                              | []            | en           | true                    | []                                         | [Albert Hypermarket, Albert Supermarket] | null      | true                  | [Pizza]          |
+| 508803***   | [Albert Hypermarket]            | []            | en           | true                    | []                                         | null                                     | false     | []                   |
 ---
 
 ### Project Summary and Future Plans
