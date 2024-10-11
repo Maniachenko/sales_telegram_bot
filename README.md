@@ -15,7 +15,9 @@ All components interact with AWS services. Let’s dive into each part.
 
 The admin panel is essentially a frontend + backend (React + Flask) website where I can upload PDF files and push them into the data pipeline. Here’s how it looks:
 
-_Include images here..._
+![Admin Panel Screenshot 1](https://drive.google.com/uc?export=view&id=1oC9DstJL4XCTvqCRt2hXypMp-Vfub1nY)
+![Admin Panel Screenshot 2](https://drive.google.com/uc?export=view&id=16S2rurcbtPWzhc5DEytjUzhEEiNEFuuV)
+![Admin Panel Screenshot 3](https://drive.google.com/uc?export=view&id=1FreXdkqI9qxZUoh6gJqj7vsuAzEQXArg)
 
 On the backend, it interacts with the **DynamoDB `pdf_metadata` table**. The schema includes:
 
