@@ -45,55 +45,6 @@ shops = [
     {"name": "Lidl Shop"}, {"name": "Penny"}, {"name": "Travel Free"}, {"name": "Zeman"}
 ]
 
-# Helper functions
-def create_s3_bucket():
-    """Creates an S3 bucket if it does not already exist."""
-    try:
-        s3.head_bucket(Bucket=BUCKET_NAME)
-        logging.info(f"S3 bucket {BUCKET_NAME} already exists.")
-    except ClientError as e:
-        error_code = e.response['Error']['Code']
-        if error_code in ('404', 'NoSuchBucket'):
-            try:
-                s3.create_bucket(
-                    Bucket=BUCKET_NAME,
-                    CreateBucketConfiguration={'LocationConstraint': AWS_REGION}
-                )
-                logging.info(f"S3 bucket {BUCKET_NAME} created successfully.")
-            except ClientError as ce:
-                logging.error(f"Error creating the bucket: {ce}")
-        elif error_code == '301':
-            logging.error(f"S3 bucket {BUCKET_NAME} exists in a different region.")
-        else:
-            logging.error(f"Error checking for the bucket: {e}")
-
-
-def create_dynamodb_table():
-    """Creates a DynamoDB table if it does not already exist."""
-    try:
-        table = dynamodb.Table(TABLE_NAME)
-        table.load()
-        logging.info(f"Table {TABLE_NAME} already exists.")
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'ResourceNotFoundException':
-            logging.info(f"Table {TABLE_NAME} does not exist. Creating it now...")
-            table = dynamodb.create_table(
-                TableName=TABLE_NAME,
-                KeySchema=[
-                    {'AttributeName': 'filename', 'KeyType': 'HASH'},
-                    {'AttributeName': 'shop_name', 'KeyType': 'RANGE'}
-                ],
-                AttributeDefinitions=[
-                    {'AttributeName': 'filename', 'AttributeType': 'S'},
-                    {'AttributeName': 'shop_name', 'AttributeType': 'S'}
-                ],
-                ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
-            )
-            table.meta.client.get_waiter('table_exists').wait(TableName=TABLE_NAME)
-            logging.info(f"Table {TABLE_NAME} created successfully.")
-        else:
-            logging.error(f"Error checking for the table: {e}")
-
 
 def load_pdf_data():
     """Load PDF metadata from DynamoDB."""
@@ -166,6 +117,16 @@ def upload_file():
         else:
             return jsonify({"error": "Either file or file_url must be provided"}), 400
 
+        # Convert valid_from and valid_to to date objects
+        valid_from_date = datetime.strptime(valid_from, '%Y-%m-%d').date()
+        valid_to_date = datetime.strptime(valid_to, '%Y-%m-%d').date()
+
+        # Get today's date
+        today = datetime.utcnow().date()
+
+        # Determine if the PDF is valid based on the current date
+        is_valid = valid_from_date <= today <= valid_to_date
+
         pdf_entry = {
             "shop_name": shop_name,
             "filename": filename,
@@ -174,16 +135,73 @@ def upload_file():
             "valid_to": valid_to,
             "upload_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             "page_split": False,
-            "used": False
+            "used": False,
+            "valid": is_valid
         }
         pdf_data = load_pdf_data()
         pdf_data.append(pdf_entry)
         save_pdf_data(pdf_data)
 
-        return jsonify({"message": "File uploaded successfully", "filename": filename, "s3_url": s3_url}), 200
+        return jsonify(
+            {"message": "File uploaded successfully", "filename": filename, "s3_url": s3_url, "valid": is_valid}), 200
 
     except NoCredentialsError:
         return jsonify({"error": "AWS credentials not available"}), 500
+
+
+@app.route('/update/<filename>', methods=['POST'])
+def update_file(filename):
+    try:
+        # Load the current PDF data from DynamoDB
+        pdf_data = load_pdf_data()
+
+        # Find the entry for the specified filename
+        file_entry = next((entry for entry in pdf_data if entry['filename'] == filename), None)
+
+        if not file_entry:
+            return jsonify({"error": "File not found"}), 404
+
+        # Get the incoming data from the request
+        shop_name = request.form.get('shop_name', file_entry['shop_name'])  # Default to existing value
+        valid_from = request.form.get('valid_from', file_entry['valid_from'])
+        valid_to = request.form.get('valid_to', file_entry['valid_to'])
+        file = request.files.get('file')
+
+        # Convert valid_from and valid_to to date objects
+        valid_from_date = datetime.strptime(valid_from, '%Y-%m-%d').date()
+        valid_to_date = datetime.strptime(valid_to, '%Y-%m-%d').date()
+
+        # Get today's date
+        today = datetime.utcnow().date()
+
+        # Perform validity check based on the current date
+        is_valid = valid_from_date <= today <= valid_to_date
+
+        # Update file if a new one is provided
+        if file:
+            # Remove old file from S3
+            s3.delete_object(Bucket=BUCKET_NAME, Key=f'pdfs/{filename}')
+
+            # Upload new file to S3
+            new_filename = file.filename
+            s3.upload_fileobj(file, BUCKET_NAME, f'pdfs/{new_filename}')
+            s3_url = f"https://{BUCKET_NAME}.s3.amazonaws.com/pdfs/{new_filename}"
+            file_entry['filename'] = new_filename
+            file_entry['s3_url'] = s3_url
+
+        # Update the metadata
+        file_entry['shop_name'] = shop_name
+        file_entry['valid_from'] = valid_from
+        file_entry['valid_to'] = valid_to
+        file_entry['valid'] = is_valid
+
+        # Save updated entry back to DynamoDB
+        save_pdf_data(pdf_data)
+
+        return jsonify({"message": f"File {filename} updated successfully", "valid": is_valid}), 200
+
+    except Exception as e:
+        return jsonify({"error": f"Error updating file: {e}"}), 500
 
 
 @app.route('/trigger_pipeline/<filename>', methods=['POST'])
@@ -210,8 +228,42 @@ def trigger_pipeline(filename):
         return jsonify({"error": "Failed to trigger Airflow DAG"}), 500
 
 
+@app.route('/delete/<filename>', methods=['DELETE'])
+def delete_file(filename):
+    try:
+        # Load PDF data
+        pdf_data = load_pdf_data()
+
+        # Find the entry in the DynamoDB table
+        file_entry = next((entry for entry in pdf_data if entry['filename'] == filename), None)
+
+        if not file_entry:
+            return jsonify({"error": "File not found"}), 404
+
+        # Delete the file from S3
+        s3.delete_object(Bucket=BUCKET_NAME, Key=f'pdfs/{filename}')
+
+        # Remove the entry from DynamoDB
+        table = dynamodb.Table(TABLE_NAME)
+        table.delete_item(
+            Key={
+                'filename': filename,
+                'shop_name': file_entry['shop_name']
+            }
+        )
+
+        # Remove the file entry from the local pdf_data if applicable
+        pdf_data = [entry for entry in pdf_data if entry['filename'] != filename]
+        save_pdf_data(pdf_data)
+
+        return jsonify({"message": f"File {filename} deleted successfully"}), 200
+
+    except NoCredentialsError:
+        return jsonify({"error": "AWS credentials not available"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error deleting file: {e}"}), 500
+
+
 # Start the Flask app
 if __name__ == '__main__':
-    create_s3_bucket()
-    create_dynamodb_table()
     app.run(debug=True)

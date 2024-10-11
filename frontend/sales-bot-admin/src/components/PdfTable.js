@@ -35,15 +35,15 @@ const PdfTable = ({ pdfs, refreshPdfs }) => {
   };
 
   const handleDelete = (filename) => {
-    axios.delete(`http://127.0.0.1:5000/delete/${filename}`)
-      .then(response => {
-        console.log(response.data);
-        refreshPdfs();
-      })
-      .catch(error => {
-        console.error('Error deleting file:', error);
-      });
-  };
+      axios.delete(`http://127.0.0.1:5000/delete/${filename}`)
+        .then(response => {
+          console.log(response.data);
+          refreshPdfs();  // Refresh the PDF list after successful deletion
+        })
+        .catch(error => {
+          console.error('Error deleting file:', error);
+        });
+    };
 
   const handleTriggerPipeline = (filename) => {
   axios.post(`http://127.0.0.1:5000/trigger_pipeline/${filename}`)
@@ -54,10 +54,28 @@ const PdfTable = ({ pdfs, refreshPdfs }) => {
     .catch(error => {
       console.error('Error triggering pipeline:', error);
     });
-};
+  };
+
+  const isTriggerDisabled = (pdf) => {
+    const today = new Date();
+    const validFrom = new Date(pdf.valid_from);
+    const validTo = new Date(pdf.valid_to);
+
+    // Disable if already used
+    if (pdf.used) return true;
+
+    // Disable if the PDF is invalid and the current date is after the valid_to date
+    if (!pdf.valid && today > validTo) return true;
+
+    // Enable if the PDF is invalid but the current date is before valid_from
+    if (!pdf.valid && today < validFrom) return false;
+
+    // Otherwise, allow triggering
+    return false;
+  };
 
 
-  const sortedPdfs = pdfs.sort((a, b) => new Date(b.valid_to) - new Date(a.valid_to));
+  const sortedPdfs = pdfs.sort((a, b) => new Date(a.valid_to) - new Date(b.valid_to));
 
   const isNearExpiry = (validToDate) => {
     const today = new Date();
@@ -77,6 +95,7 @@ const PdfTable = ({ pdfs, refreshPdfs }) => {
             <th>Valid From</th>
             <th>Valid To</th>
             <th>Upload Date</th>
+            <th>Valid</th>
             <th>Edit</th>
             <th>Delete</th>
             <th>Split Pages</th>
@@ -90,12 +109,13 @@ const PdfTable = ({ pdfs, refreshPdfs }) => {
               <td>{pdf.valid_from}</td>
               <td>{pdf.valid_to}</td>
               <td>{pdf.upload_date}</td>
+              <td>{pdf.valid ? 'Valid' : 'Invalid'}</td> {/* Display validity */}
               <td><button onClick={() => handleEdit(pdf)}>Edit</button></td>
               <td><button onClick={() => handleDelete(pdf.filename)}>Delete</button></td>
               <td>
                 <button
                     onClick={() => handleTriggerPipeline(pdf.filename)}
-                    disabled={pdf.used}  // Disable button if already processed
+                    disabled={isTriggerDisabled(pdf)}
                 >
                     {pdf.used ? 'Already Processed' : 'Trigger Pipeline'}
                 </button>

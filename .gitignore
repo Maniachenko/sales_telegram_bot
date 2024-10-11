@@ -1,0 +1,11 @@
+backend/item_detection_cvat/
+backend/item_detection_files/
+backend/item_detector/data/
+backend/item_processing/data/
+backend/item_processing_cvat/
+backend/item_processing_files/
+backend/old models/
+backend/uploads/
+backend/user_data/
+cvat/
+ultralytics/
