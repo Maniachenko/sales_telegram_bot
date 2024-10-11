@@ -2,7 +2,7 @@
 
 This bot is already deployed and operational in Telegram Messenger under the handle [@TrackShopSalesBot](https://t.me/TrackShopSalesBot). Simply put, this bot functions as a search engine for sales. It tracks and searches for sales on shop items (currently focused on groceries with available "letáky" or promotional flyers). For now, it works with a test PDF (used during development), but soon I plan to upload new data.
 
-<img src="https://drive.google.com/uc?export=view&id=18wwmwhRewnwtS2H4ENvcDE6fdqo-jpZK" width="250" height="500">
+<img src="https://drive.google.com/uc?export=view&id=18wwmwhRewnwtS2H4ENvcDE6fdqo-jpZK" width="350" height="700">
 
 ## System Components
 
