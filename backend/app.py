@@ -212,7 +212,7 @@ def trigger_pipeline(filename):
     if not file_entry:
         return jsonify({"error": "File not found"}), 404
 
-    payload = {'filename': filename, 'shop_name': file_entry['shop_name']}
+    payload = {'filename': filename, 'shop_name': file_entry['shop_name'], 'valid': file_entry['valid']}
     app.logger.debug(f"Triggering Airflow DAG with payload: {json.dumps(payload)}")
 
     try:
