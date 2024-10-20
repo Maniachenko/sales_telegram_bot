@@ -1,3 +1,13 @@
+# ⚠️ Warning: Repository Code is Not Up to Date
+
+This repository **does not contain the most recent code** for the project. The code here serves as a base reference, but the full, updated version is not included for various reasons. 
+
+For access to the **latest code** or further inquiries about this project, please feel free to reach out via **email** at:
+
+📧 alexm08060303@gmail.com
+
+Additionally, the complete project details and code may be provided during an **interview process** if necessary.
+
 # TrackShopSalesBot
 
 This bot is already deployed and operational in Telegram Messenger under the handle [@TrackShopSalesBot](https://t.me/TrackShopSalesBot). Simply put, this bot functions as a search engine for sales. It tracks and searches for sales on shop items (currently focused on groceries with available "letáky" or promotional flyers). For now, it works with a test PDF (used during development), but soon I plan to upload new data.
